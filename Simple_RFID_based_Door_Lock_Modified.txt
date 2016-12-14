@@ -1,0 +1,113 @@
+#include <SPI.h>
+
+#include <MFRC522.h>
+ 
+
+#define DoorPin 8
+
+#define SS_PIN 10
+
+#define RST_PIN 9
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
+
+
+
+int read_count=0;
+int j=0,k=0; 			// Variables to iterate in for loops
+char data_temp, RFID_data[12];
+char Saved_Tags[3][12]={
+                       {'1','8','0','0','8','E','0','4','8','D','1','F'},
+                       {'1','8','0','0','8','D','C','0','2','E','7','B'},
+                       {'1','8','0','0','8','F','G','6','7','W','2','A'}};
+boolean tag_check,tag_status,entry_control;
+
+void setup()
+
+{
+
+pinMode(DoorPin, OUTPUT);
+
+Serial.begin(9600);			// Initialize serial communications with the PC
+SPI.begin();			// Init SPI bus
+mfrc522.PCD_Init();                 	// Init MFRC522 card
+
+}
+
+void loop()
+{
+RecieveData();
+CheckData();
+AccessCheck();
+}
+
+void RecieveData()
+{
+
+// Look for new cards
+if ( ! mfrc522.PICC_IsNewCardPresent()) 
+     {
+	return;
+     }
+// Select one of the cards
+if ( ! mfrc522.PICC_ReadCardSerial()) 
+    {
+	return;
+    }
+
+//data_temp=mySerial.read();
+
+data_temp=mfrc522.PICC_ReadCardSerial();
+RFID_data[read_count]=data_temp;
+read_count++;
+
+}
+}
+
+void CheckData()
+{
+if(read_count==12)
+{
+entry_control=true;  
+for(k=0;k<3;k++)
+{
+for(j=0;j<12;j++)
+{
+  if(Saved_Tags[k][j]==RFID_data[j])
+ {
+  tag_check=true;
+  }
+  else
+  {
+  tag_check=false;
+  break;
+  }
+}
+if(tag_check==true)
+{
+tag_status=true;
+}}
+read_count=0;
+}}
+
+void AccessCheck()
+{
+if(entry_control==true)
+{
+if(tag_status==true)
+{
+  lcd.clear();
+  delay(100);
+lcd.setCursor(0,1);  
+lcd.print("Access Granted");
+}
+else
+{
+  lcd.clear();
+  delay(100);
+ lcd.setCursor(0,1);
+lcd.print("Access Denied");
+}
+entry_control=false;
+tag_status=false;
+}}
+
