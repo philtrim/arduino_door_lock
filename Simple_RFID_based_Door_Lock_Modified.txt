@@ -95,17 +95,17 @@ if(entry_control==true)
 {
 if(tag_status==true)
 {
-  lcd.clear();
+ // lcd.clear();
   delay(100);
-lcd.setCursor(0,1);  
-lcd.print("Access Granted");
+//lcd.setCursor(0,1);  
+//lcd.print("Access Granted");
 }
 else
 {
   lcd.clear();
   delay(100);
- lcd.setCursor(0,1);
-lcd.print("Access Denied");
+// lcd.setCursor(0,1);
+//lcd.print("Access Denied");
 }
 entry_control=false;
 tag_status=false;
