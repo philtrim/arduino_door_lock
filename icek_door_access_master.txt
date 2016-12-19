@@ -20,13 +20,16 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
 
 
-char cards[]="BD 31 15 2B","BD 31 15 2B";
- 
 
+//Enter cards to allow access 
+char cards[]="BD 31 15 2B", // Toby Smith
+	     "BD 31 15 2B";
+ // Billy Phelps
 
 void setup() 
 
-{pinMode(DoorPin, OUTPUT);
+{
+pinMode(DoorPin, OUTPUT);
   
 Serial.begin(9600);   // Initiate a serial communication
   
